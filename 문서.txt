@@ -1,0 +1,31 @@
+aws eks --region ap-northeast-2 update-kubeconfig --name EKS-DEV-CLUSTER
+aws eks --region ap-northeast-2 update-kubeconfig --name EKS-QA-CLUSTER
+aws eks --region ap-northeast-2 update-kubeconfig --name EKS-REVIEW-CLUSTER
+aws eks --region ap-northeast-2 update-kubeconfig --name EKS-HelloLudi-Prod-Cluster
+
+##준비
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+1.
+kubectl create namespace monitoring
+helm install prometheus prometheus-community/kube-prometheus-stack -f "values.yaml" --namespace monitoring
+kubectl port-forward service/prometheus-grafana 3000:80 --namespace monitoring  
+
+//localhost:3000 으로접속
+id는 admin
+pw는 prom-operator
+로그인 후 // configure
+
+
+2.
+kubectl edit services prometheus-grafana -n monitoring   (type : ClusterIP -> NodePort)
+
+
+
+
+
+https://may9noy.tistory.com/303
+https://enumclass.tistory.com/249
+
+
